@@ -5,25 +5,25 @@ from pathlib import Path
 
 from hashlib import sha1
 
-data_pth = Path() / 'data'
-example_pth =  data_pth / '24719.f3_beh_CHYM.csv'
+data_pth = Path() / 'data' # directory to files 
+example_pth =  data_pth / '24719.f3_beh_CHYM.csv' # new downloaded file
 
-if not example_pth.is_file():
+if not example_pth.is_file(): #check if data are there 
     raise RuntimeError('Have you run the "get_data.py" script?')
 
-contents = example_pth.read_bytes()
+contents = example_pth.read_bytes() #create hash for example file
 hash_value = sha1(contents).hexdigest()
 
-print(f'Hash value for {example_pth} is {hash_value}')
+print("aaaaa",f'Hash value for {example_pth} is {hash_value}') #print the computed hash value
 
-hashes_pth = data_pth / 'data_hashes.txt'
+hashes_pth = data_pth / 'data_hashes.txt' # path to file with expected hashes
 
-print(f'Contents of {hashes_pth}')
+print("bbbbbbb",f'Contents of {hashes_pth}') #read file with expected hashes 
 hashes_text = hashes_pth.read_text()
-print(hashes_text)
+print("äääää",hashes_text)
 
 
-def hash_for_fname(fname):
+def hash_for_fname(fname): #function to compute and return hash for given file
     """ Return SHA1 hash string for file in `fname`
 
     `fname` can be a string or a Path.
@@ -31,7 +31,9 @@ def hash_for_fname(fname):
     # Convert a string filename to a Path object.
     fpath = Path(fname)
     # Your code here.
-    return 'not-really-the-hash'
+    hash_fname = sha1(fpath.read_bytes()).hexdigest()
+
+    return hash_fname
 
 
 # Fill in the function above to make the test below pass.
@@ -45,8 +47,21 @@ def check_hashes(hash_fname):
     """ Check hashes and filenames in given in file `hash_fname`
     """
     hash_pth = Path(hash_fname)
+
     # Directory containing hash filenames file.
     data_dir = hash_pth.parent
+    print("######",data_dir, hash_pth)
+    text = hash_pth.read_text()
+    for line in text.splitlines():
+    	expected_has, filename = line.split()
+    	print(expected_has, "jfdkhs",filename)
+    	hash_value = sha1((data_dir/filename).read_bytes()).hexdigest()
+    	if hash_value == expected_has:
+    		return True
+    
+
+
+
     # Read in text for hash filename
     # Split into lines.
     # For each line:
